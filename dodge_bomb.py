@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 import pygame as pg
 import random
 
@@ -75,6 +76,16 @@ def main():
             
 
         if  kk_rct.colliderect(bomb_rct):#ゲームオーバー要素
+            # fonto = pg.font.Font(None, 80)
+            # txt = fonto.render("Game Over",(255, 255, 255))
+            anten=pg.Surface((WIDTH,HEIGHT))
+            pg.draw.circle(anten, (255, 0, 0), (10, 10), 10)
+            anten.set_alpha(200)
+            screen.blit(anten, [0,0])
+            pg.display.update()
+            #pg.draw.rect(anten(0,0,0),(WIDTH,HEIGHT))
+            time.sleep(5)
+            
             return
         
         screen.blit(bg_img, [0, 0]) 
