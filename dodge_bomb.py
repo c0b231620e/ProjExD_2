@@ -13,6 +13,19 @@ DELTA={  #移動用辞書
 }
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+def gamen(rct:pg.Rect)->tuple[bool,bool]:
+    """
+    引数：コウかトン　と　爆弾　のレクと
+    戻り値：　真理値タプル（横方向、縦方向）
+    画面ないTrue、外false
+    """
+    yoko,tate=True,True
+    if rct.left < 0 or WIDTH < rct.right: #　横画面判定 
+        yoko=False
+    if rct.top < 0 or HEIGHT < rct.bottom: #  縦画面判定
+        tate=False
+    return yoko,tate
+
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -44,6 +57,8 @@ def main():
                 sum_mv[0] += v[0]
                 sum_mv[1] += v[1]
         kk_rct.move_ip(sum_mv)# 移動させる
+        if gamen(kk_rct)!=(True,True):
+            kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
         bomb_rct.move_ip(vx,vy)
         screen.blit(kk_img, kk_rct)
         screen.blit(bomb_img,bomb_rct)
