@@ -59,32 +59,26 @@ def main():
     bomb_img.set_colorkey((0, 0, 0))# 黒い部分を透明化
     bomb_rct = bomb_img.get_rect()#爆弾の座標
     bomb_rct.center=random.randint(0,WIDTH),random.randint(0,HEIGHT)
-    vx,vy=+5,+5 #移動速度
+    vx, vy= +5, +5 #移動速度
     clock = pg.time.Clock()
     tmr = 0
     kk_img = pg.transform.flip(kk_img, True, False)
-
-
-
-
-
 
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:  # 罰を押したら終了するように設定
                 return
             
-
         if  kk_rct.colliderect(bomb_rct):#ゲームオーバー要素
+            
+            # anten=pg.Surface((WIDTH,HEIGHT))
+            # pg.draw.circle(anten, (255, 0, 0), (10, 10), 10)
+            # anten.set_alpha(200)
+            # screen.blit(anten, [0,0])
             # fonto = pg.font.Font(None, 80)
             # txt = fonto.render("Game Over",(255, 255, 255))
-            anten=pg.Surface((WIDTH,HEIGHT))
-            pg.draw.circle(anten, (255, 0, 0), (10, 10), 10)
-            anten.set_alpha(200)
-            screen.blit(anten, [0,0])
-            pg.display.update()
-            #pg.draw.rect(anten(0,0,0),(WIDTH,HEIGHT))
-            time.sleep(5)
+            # #pg.draw.rect(anten(0,0,0),(WIDTH,HEIGHT))
+            # time.sleep(5)
             
             return
         
