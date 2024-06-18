@@ -60,6 +60,11 @@ def main():
         if gamen(kk_rct)!=(True,True):
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
         bomb_rct.move_ip(vx,vy)
+        yoko,tate=gamen(bomb_rct)
+        if not yoko:#横の画面規制の反転
+            vx *=-1
+        if not tate:#縦画面規制の反転
+            vy *=-1
         screen.blit(kk_img, kk_rct)
         screen.blit(bomb_img,bomb_rct)
         pg.display.update()
