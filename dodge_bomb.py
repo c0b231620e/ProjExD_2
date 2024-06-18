@@ -48,6 +48,9 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:  # 罰を押したら終了するように設定
                 return
+        if  kk_rct.colliderect(bomb_rct):
+            return
+
         screen.blit(bg_img, [0, 0]) 
 
         key_lst = pg.key.get_pressed()  # 押したキーを取得
