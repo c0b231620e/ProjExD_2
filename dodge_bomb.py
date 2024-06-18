@@ -4,20 +4,38 @@ import pygame as pg
 import random
 
 
-WIDTH, HEIGHT = 1600, 900
+WIDTH, HEIGHT = 1530, 900 #  元1600,900
+
 DELTA={  #移動用辞書        
        pg.K_UP:(0,-5),
        pg.K_DOWN:(0,5),
        pg.K_LEFT:(-5,0),
        pg.K_RIGHT:(5,0)
 }
+
+def ang():
+    kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0)
+    hnkk_img=pg.transform.flip(kk_img,True,False)
+    ANGLE={          
+       (0,-5):pg.transform.rotozoom(hnkk_img,90,1),#上向き
+       (0,5):pg.transform.rotozoom(hnkk_img,-90,1),#下向き
+       (5,-5):pg.transform.rotozoom(hnkk_img,35,1),#右上向き
+       (5,5):pg.transform.rotozoom(hnkk_img,-35,1),#右下向き
+       (5,0):pg.transform.rotozoom(hnkk_img,0,1),#右向き
+       (-5,5):pg.transform.rotozoom(kk_img,35,1),#左下
+       (-5,0):pg.transform.rotozoom(kk_img,0,1),#左
+       (-5,-5):pg.transform.rotozoom(kk_img,-35,1),#左上
+       (0,0):kk_img
+    }
+    return ANGLE
+
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 def gamen(rct:pg.Rect)->tuple[bool,bool]:
     """
-    引数：コウかトン　と　爆弾　のレクと
+    引数：コウかトン　と　爆弾　のrct
     戻り値：　真理値タプル（横方向、縦方向）
-    画面ないTrue、外false
+    画面内True、外false
     """
     yoko,tate=True,True
     if rct.left < 0 or WIDTH < rct.right: #　横画面判定 
@@ -32,6 +50,7 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("fig/pg_bg.jpg")    
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0)
+    kk_imgs=ang()
     kk_rct = kk_img.get_rect()  # 座標系
     kk_rct.center = 900, 400
     bomb_img = pg.Surface((20, 20))#20,20の殻  を作る
@@ -42,17 +61,23 @@ def main():
     vx,vy=+5,+5 #移動速度
     clock = pg.time.Clock()
     tmr = 0
-    
+    kk_img = pg.transform.flip(kk_img, True, False)
+
+
+
+
+
 
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:  # 罰を押したら終了するように設定
                 return
-        if  kk_rct.colliderect(bomb_rct):
+            
+
+        if  kk_rct.colliderect(bomb_rct):#ゲームオーバー要素
             return
-
+        
         screen.blit(bg_img, [0, 0]) 
-
         key_lst = pg.key.get_pressed()  # 押したキーを取得
         sum_mv = [0, 0]# 移動用のリスト
         for k,v in DELTA.items():
@@ -60,15 +85,20 @@ def main():
                 sum_mv[0] += v[0]
                 sum_mv[1] += v[1]
         kk_rct.move_ip(sum_mv)# 移動させる
-        if gamen(kk_rct)!=(True,True):
+        kk_img=kk_imgs[tuple(sum_mv)]
+        
+
+        if gamen(kk_rct)!=(True,True):#鳥の画面規制
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
+        screen.blit(kk_img, kk_rct)
         bomb_rct.move_ip(vx,vy)
-        yoko,tate=gamen(bomb_rct)
+        
+        yoko,tate=gamen(bomb_rct)#画面規制確認
         if not yoko:#横の画面規制の反転
             vx *=-1
         if not tate:#縦画面規制の反転
             vy *=-1
-        screen.blit(kk_img, kk_rct)
+
         screen.blit(bomb_img,bomb_rct)
         pg.display.update()
         tmr += 1
